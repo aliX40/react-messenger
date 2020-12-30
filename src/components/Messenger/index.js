@@ -2,36 +2,111 @@ import React from 'react';
 import ConversationList from '../ConversationList';
 import MessageList from '../MessageList';
 import './Messenger.css';
+import clsx from 'clsx';
+import {makeStyles} from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
+import {Grid} from "@material-ui/core";
+import Hidden from "@material-ui/core/Hidden";
 
 export default function Messenger(props) {
     return (
-      <div className="messenger">
-        {/* <Toolbar
-          title="Messenger"
-          leftItems={[
-            <ToolbarButton key="cog" icon="ion-ios-cog" />
-          ]}
-          rightItems={[
-            <ToolbarButton key="add" icon="ion-ios-add-circle-outline" />
-          ]}
-        /> */}
+        <div>
+            <Hidden mdUp>
+                <Grid container direction={"column"}>
+                    <Grid item xs={12}>
+                        <TemporaryDrawer/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <MessageList/>
+                    </Grid>
+                </Grid>
+            </Hidden>
+            <Hidden smDown>
+                <Grid container direction={"row"}>
+                    <Grid item xs={3}>
+                        <ConversationList/>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <MessageList/>
+                    </Grid>
+                </Grid>
+            </Hidden>
 
-        {/* <Toolbar
-          title="Conversation Title"
-          rightItems={[
-            <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
-            <ToolbarButton key="video" icon="ion-ios-videocam" />,
-            <ToolbarButton key="phone" icon="ion-ios-call" />
-          ]}
-        /> */}
-
-        <div className="scrollable sidebar">
-          <ConversationList />
         </div>
+    );
+}
 
-        <div className="scrollable content">
-          <MessageList />
+const useStyles = makeStyles({
+    list: {
+        width: 250,
+    },
+    fullList: {
+        width: 'auto',
+    },
+});
+
+export function TemporaryDrawer(props) {
+    const classes = useStyles();
+    const [state, setState] = React.useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+    });
+
+    const menu = props.menu;
+
+    const toggleDrawer = (anchor, open) => (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        setState({...state, [anchor]: open});
+    };
+
+    const list = (anchor) => (
+        <div
+            className={clsx(classes.list, {
+                [classes.fullList]: anchor === 'top' || anchor === 'bottom',
+            })}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <List>
+                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                    <ListItem button key={text}>
+                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                        <ListItemText primary={text}/>
+                    </ListItem>
+                ))}
+            </List>
+            <Divider/>
+            <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                    <ListItem button key={text}>
+                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                        <ListItemText primary={text}/>
+                    </ListItem>
+                ))}
+            </List>
         </div>
-      </div>
+    );
+
+    return (
+        <div>
+            <Button onClick={toggleDrawer("left", true)} variant={"outlined"}>Conversations</Button>
+            <Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
+                <ConversationList/>
+            </Drawer>
+        </div>
     );
 }
