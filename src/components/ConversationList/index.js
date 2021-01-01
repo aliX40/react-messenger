@@ -6,7 +6,7 @@ import ToolbarButton from '../ToolbarButton';
 import axios from 'axios';
 
 import './ConversationList.css';
-
+// TODO Turn it into a class
 export default function ConversationList(props) {
   const [conversations, setConversations] = useState([]);
   useEffect(() => {
@@ -39,6 +39,7 @@ export default function ConversationList(props) {
         />
         <ConversationSearch />
         {
+          //ToDO add current 
           conversations.map(conversation =>
             <ConversationListItem
               key={conversation.name}
