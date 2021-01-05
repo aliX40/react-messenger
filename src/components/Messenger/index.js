@@ -20,96 +20,127 @@ import clsx from 'clsx';
 // componentDidMount() {
 //     fetchSomething();
 //   }
-export default class Messenger extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={contacts:[{name:"John Reaper",lastMsg:"long msg1"},{name:"Jack Flowers",lastMsg:"long msg2"}],current:0,};
+export default class Messenger extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      contacts: [{ name: "John Reaper", id: "0" },
+      { name: "Jack Flowers", id: "1" }],
+      current: 1, current_messages: [{
+        id: 1,
+        author: 'apple',
+        message: 'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
+        timestamp: new Date().getTime()
+      }, {
+        id: 2,
+        author: 'orange',
+        message: 'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
+        timestamp: new Date().getTime()
+      },]
+    };
+  }
+  getMessages(i) {
+    if (i===1) {
+      return [
+        {
+          id: 1,
+          author: 'apple',
+          message: 'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 2,
+          author: 'orange',
+          message: 'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 3,
+          author: 'orange',
+          message: 'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 4,
+          author: 'apple',
+          message: 'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 5,
+          author: 'apple',
+          message: 'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 6,
+          author: 'apple',
+          message: 'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 7,
+          author: 'orange',
+          message: 'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 8,
+          author: 'orange',
+          message: 'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 9,
+          author: 'apple',
+          message: 'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
+          timestamp: new Date().getTime()
+        },
+        {
+          id: 10,
+          author: 'orange',
+          message: 'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
+          timestamp: new Date().getTime()
+        },
+      ];
+    } else {
+      return [{
+        id: 1,
+        author: 'apple',
+        message: 'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
+        timestamp: new Date().getTime()
+      }, {
+        id: 2,
+        author: 'orange',
+        message: 'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
+        timestamp: new Date().getTime()
+      },];
     }
-    handleClickConversation(i){
-        if (i!== this.state.current){
-            this.setState({contacts:this.state.contacts,current:i})
-        }
-    }
-    render() {
-        
-        return (
-            <div className="messenger">
+
+  }
+  getConntacts(i) {
+    // dummy
+    return this.state.contacts;
+  }
+  handleClickConversation(i) {
+    alert("state changed")
+    // console.log(i);
+
+    this.setState({ contacts: this.getConntacts(i), current: i, current_messages: this.getMessages(i) })
+  }
+  render() {
+
+    return (
+      <div className="messenger">
 
         <div className="scrollable sidebar">
-          <ConversationList current={this.state.current} onclick= {(i)=>this.handleClickConversation(i)}/>
+          <ConversationList current={this.state.current} onclick={this.handleClickConversation.bind(this)} />
         </div>
 
         <div className="scrollable content">
-          <MessageList current={this.state.current} />
+          <MessageList current={this.state.current} messages={this.state.current_messages} />
         </div>
       </div>
-        );
-    }
+    );
+  }
 }
-
-// const useStyles = makeStyles({
-//     list: {
-//         width: 250,
-//     },
-//     fullList: {
-//         width: 'auto',
-//     },
-// });
-
-// export function TemporaryDrawer(props) {
-//     const classes = useStyles();
-//     const [state, setState] = React.useState({
-//         top: false,
-//         left: false,
-//         bottom: false,
-//         right: false,
-//     });
-
-//     const menu = props.menu;
-
-//     const toggleDrawer = (anchor, open) => (event) => {
-//         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-//             return;
-//         }
-
-//         setState({ ...state, [anchor]: open });
-//     };
-
-//     const list = (anchor) => (
-//         <div
-//             className={clsx(classes.list, {
-//                 [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-//             })}
-//             role="presentation"
-//             onClick={toggleDrawer(anchor, false)}
-//             onKeyDown={toggleDrawer(anchor, false)}
-//         >
-//             <List>
-//                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-//                     <ListItem button key={text}>
-//                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-//                         <ListItemText primary={text} />
-//                     </ListItem>
-//                 ))}
-//             </List>
-//             <Divider />
-//             <List>
-//                 {['All mail', 'Trash', 'Spam'].map((text, index) => (
-//                     <ListItem button key={text}>
-//                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-//                         <ListItemText primary={text} />
-//                     </ListItem>
-//                 ))}
-//             </List>
-//         </div>
-//     );
-
-//     return (
-//         <div>
-//             <Button onClick={toggleDrawer("left", true)} variant={"outlined"}>Conversations</Button>
-//             <Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
-//                 <ConversationList />
-//             </Drawer>
-//         </div>
-//     );
-// }

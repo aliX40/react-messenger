@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ConversationSearch from '../ConversationSearch';
 import ConversationListItem from '../ConversationListItem';
 import Toolbar from '../Toolbar';
@@ -11,42 +11,45 @@ export default function ConversationList(props) {
   const [conversations, setConversations] = useState([]);
   useEffect(() => {
     getConversations()
-  },[])
+  }, [])
 
- const getConversations = () => {
+  const getConversations = () => {
     axios.get('https://randomuser.me/api/?results=2').then(response => {
-        let newConversations = response.data.results.map(result => {
-          return {
-            photo: result.picture.large,
-            name: `${result.name.first} ${result.name.last}`,
-            text: 'Hello world! This is a long message that needs to be truncated.'
-          };
-        });
-        setConversations([...conversations, ...newConversations])
+      let newConversations = response.data.results.map((result, i) => {
+        let k= {
+          id:i,
+          photo: result.picture.large,
+          name: `${result.name.first} ${result.name.last}`,
+          text: 'Hello world! This is a long message that needs to be truncated.'
+        }
+        i++
+        return k;
+      });
+      setConversations([...conversations, ...newConversations])
     });
   }
 
-    return (
-      <div className="conversation-list">
-        <Toolbar
-          title="Messenger"
-          leftItems={[
-            <ToolbarButton key="cog" icon="ion-ios-cog" />
-          ]}
-          rightItems={[
-            <ToolbarButton key="add" icon="ion-ios-add-circle-outline" />
-          ]}
-        />
-        <ConversationSearch />
-        {
-          //ToDO add current 
-          conversations.map(conversation =>
-            <ConversationListItem
-              key={conversation.name}
-              data={conversation}
-            />
-          )
-        }
-      </div>
-    );
+  return (
+    <div className="conversation-list">
+      <Toolbar
+        title="Messenger"
+        leftItems={[
+          <ToolbarButton key="cog" icon="ion-ios-cog" />
+        ]}
+        rightItems={[
+          <ToolbarButton key="add" icon="ion-ios-add-circle-outline" />
+        ]}
+      />
+      <ConversationSearch />
+      {
+        //ToDO add current 
+        conversations.map(conversation =>
+          <ConversationListItem
+            key={conversation.name}
+            id={conversation.id}
+            data={conversation} onClick={props.onclick}
+          />)
+      }
+    </div >
+  );
 }
