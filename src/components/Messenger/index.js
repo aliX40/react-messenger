@@ -2,7 +2,6 @@ import React from 'react';
 import ConversationList from '../ConversationList';
 import MessageList from '../MessageList';
 import './Messenger.css';
-import clsx from 'clsx';
 // import { makeStyles } from '@material-ui/core/styles';
 // import Drawer from '@material-ui/core/Drawer';
 // import Button from '@material-ui/core/Button';
@@ -24,23 +23,14 @@ export default class Messenger extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      contacts: [{ name: "John Reaper", id: "0" },
-      { name: "Jack Flowers", id: "1" }],
-      current: 1, current_messages: [{
-        id: 1,
-        author: 'apple',
-        message: 'Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.',
-        timestamp: new Date().getTime()
-      }, {
-        id: 2,
-        author: 'orange',
-        message: 'It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!',
-        timestamp: new Date().getTime()
-      },]
+      contacts: [{ name: "Messenger Bot", id: "0" }, { name: "John Reaper", id: "1" },
+      { name: "Jack Flowers", id: "2" }],
+      current: 0, current_messages: this.getMessages(0)
     };
   }
   getMessages(i) {
-    if (i===1) {
+    // dummy
+    if (i === 1) {
       return [
         {
           id: 1,
@@ -103,6 +93,13 @@ export default class Messenger extends React.Component {
           timestamp: new Date().getTime()
         },
       ];
+    } else if (i === 0) {
+      return [{
+        id: 1,
+        author: 'Bot',
+        message: 'Hello Guest! How can i help you ,type /help for more info \n  .',
+        timestamp: new Date().getTime()
+      },];
     } else {
       return [{
         id: 1,
@@ -123,8 +120,7 @@ export default class Messenger extends React.Component {
     return this.state.contacts;
   }
   handleClickConversation(i) {
-    alert("state changed")
-    // console.log(i);
+    console.log(i);
 
     this.setState({ contacts: this.getConntacts(i), current: i, current_messages: this.getMessages(i) })
   }
